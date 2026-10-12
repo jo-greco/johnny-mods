@@ -1,0 +1,19 @@
+{
+  "name": "johnny-mods",
+  "owner": {
+    "name": "Johnny Greco"
+  },
+  "description": "Johnny's own Claude Code mods: session handoffs and cheaper-model routing.",
+  "plugins": [
+    {
+      "name": "session-relay",
+      "source": "./session-relay",
+      "description": "Sessions hand work to each other and get the result back: one plans, another builds, and the answer returns to whoever asked."
+    },
+    {
+      "name": "model-router",
+      "source": "./model-router",
+      "description": "Sends simple, tool-free turns to a cheaper model to save usage; everything else stays on your model."
+    }
+  ]
+}

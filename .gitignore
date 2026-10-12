@@ -1,0 +1,6 @@
+# Laid by Claude Code at each load: the API's types and a tsconfig extending
+# them. Regenerated, and tied to whichever build wrote them.
+.claude-plugin/types/
+*/.claude-plugin/types/
+*/tsconfig.json
+node_modules/
