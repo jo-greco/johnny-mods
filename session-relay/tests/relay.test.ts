@@ -162,3 +162,32 @@ describe('what it leaves alone', () => {
     expect(ledger.text).toMatch(/No handoffs/)
   })
 })
+
+describe('answering without a prompt', () => {
+  const REPLY_TOOL = 'mcp__session-relay__handoff_reply'
+
+  /**
+   * The building session is often unattended. A permission prompt on the reply
+   * would strand the finished work there, and the asker would never hear.
+   */
+  test('the reply tool runs without stopping to ask', async ($, on) => {
+    on('tool.check', () => ({ decision: 'ask' as const }))
+    const verdict = await $.tool.check({ tool: REPLY_TOOL, input: { id: 'abc123', result: 'done' } })
+
+    expect(verdict.decision).toBe('allow')
+  })
+
+  test("a rule the person wrote to deny it still stands", async ($, on) => {
+    on('tool.check', () => ({ decision: 'deny' as const, reason: 'denied by a rule', rule: REPLY_TOOL }))
+    const verdict = await $.tool.check({ tool: REPLY_TOOL, input: { id: 'abc123', result: 'done' } })
+
+    expect(verdict.decision).toBe('deny')
+  })
+
+  test('handing work OUT still goes through the normal permission rules', async ($, on) => {
+    on('tool.check', () => ({ decision: 'ask' as const }))
+    const verdict = await $.tool.check({ tool: 'mcp__session-relay__handoff_send', input: { to: 'b', task: 't' } })
+
+    expect(verdict.decision).toBe('ask')
+  })
+})

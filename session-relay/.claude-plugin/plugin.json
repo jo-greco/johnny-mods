@@ -1,7 +1,10 @@
 {
   "name": "session-relay",
-  "version": "0.1.0",
-  "author": { "name": "Johnny Greco" },
+  "version": "0.2.0",
+  "author": {
+    "name": "Johnny Greco"
+  },
+  "license": "MIT",
   "description": "Sessions hand work to each other and get the result back: one plans, another builds, and the answer returns to whoever asked.",
   "types": "./types/index.d.ts"
 }

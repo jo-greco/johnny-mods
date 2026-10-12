@@ -1,22 +1,18 @@
 {
   "name": "model-router",
-  "version": "0.1.0",
-  "author": { "name": "Johnny Greco" },
-  "description": "Sends simple, tool-free turns to a cheaper model to save usage; everything else stays on your model.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Johnny Greco"
+  },
+  "license": "MIT",
+  "description": "Sends quick questions to Claude Haiku 5.5 to save usage; everything else stays on your model.",
   "types": "./types/index.d.ts",
   "userConfig": {
-    "cheapModel": {
-      "type": "string",
-      "title": "Cheaper model",
-      "description": "The model simple turns are sent to.",
-      "default": "claude-haiku-5-5",
-      "options": ["claude-haiku-5-5", "claude-sonnet-5-5"]
-    },
-    "maxMessages": {
+    "maxContextTokens": {
       "type": "number",
-      "title": "Longest conversation to route",
-      "description": "Past this many messages a switch would re-send the whole conversation uncached to the other model, which can cost more than it saves, so turns stay on your model.",
-      "default": 30
+      "title": "Largest conversation to route, in tokens",
+      "description": "Past this, a routed turn would send the whole conversation uncached to Haiku, whose input price steps up past 100K tokens; your model reading its own cache is then cheaper, so turns stay put.",
+      "default": 100000
     }
   }
 }

@@ -19,8 +19,8 @@ declare module 'claude-code' {
       decision: RouteDecision
       stats: RouterStats
       isEnabled: boolean
-      /** The size of the conversation at the last step seen. */
-      lastMessageCount: number
+      /** The prompt size of the last main-loop request, in tokens, as the API reported it. */
+      lastContextTokens: number
     }
   }
 }

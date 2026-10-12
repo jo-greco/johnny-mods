@@ -173,6 +173,30 @@ export const register: Register = on => {
     return { result: await replyHandoff($, id, result) }
   }).catch(() => ({ result: 'The answer could not be sent: the relay failed. The handoff is still open.' }))
 
+  /**
+   * Answering a handoff runs without a permission prompt.
+   *
+   * The building session is often the one nobody is watching: it was handed
+   * the work precisely so the person could look elsewhere. A prompt on the
+   * reply would leave the finished work stranded there, and the asker never
+   * hearing. The reply can only go to the session that sent that id, so this
+   * lets that one tool through and nothing more.
+   *
+   * It only ever turns the default "ask" into "allow". A rule the person wrote
+   * that denies the tool still stands, and so does an organization's ceiling.
+   * `handoff_send` is not touched: pushing work into another session stays
+   * under the person's normal permission rules.
+   */
+  on('tool.check', { tool: 'mcp__session-relay__handoff_reply' }, async ($, e, next) => {
+    const verdict = await next(e)
+    if (verdict.decision !== 'ask' || e.ceiling !== undefined) return verdict
+
+    return {
+      decision: 'allow' as const,
+      reason: 'session-relay: an answer to a handoff goes back only to the session that asked for it',
+    }
+  })
+
   on('session.receive', async ($, e, next) => {
     // A message for one of this session's subagents is that loop's business.
     if (e.agentId !== undefined) return next(e)
